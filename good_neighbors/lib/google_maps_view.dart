@@ -82,9 +82,9 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
             .then((Position _position) {
           if (_position != null) {
             setState((){
-            latLng = LatLng(_position.latitude, _position.longitude,);
-            // globals.Lat = _position.latitude;
-            // globals.Long = _position.longitude;
+              latLng = LatLng(_position.latitude, _position.longitude,);
+              globals.Lat = _position.latitude;
+              globals.Long = _position.longitude;
             });
           }
         });
