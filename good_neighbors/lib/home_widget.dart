@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'placeholder_widget.dart';
 import 'google_maps_view.dart';
 import 'profile.dart';
+import 'rewards.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     GetCurrentLocation(),
     PlaceholderWidget(Colors.deepOrange),
-    PlaceholderWidget(Colors.green),
+    Rewards(),
     UserProfile()
   ];
 
