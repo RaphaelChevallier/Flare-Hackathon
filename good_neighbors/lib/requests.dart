@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'globals.dart' as globals;
 
 class RequestWidget extends StatefulWidget {
   RequestWidget({Key key}) : super(key: key);
@@ -13,15 +17,35 @@ class _RequestWidget extends State<RequestWidget> {
   String subCategoryName;
   String description;
   List<String> subCatList  = <String>[];
-   
-
-     
-  //bool other = false;
+  final databaseReference = FirebaseDatabase.instance.reference();
+  int requestNum;
 
   _RequestWidget(this.color);
 
+int getRequestNumber(){
+  databaseReference.child("requestNumber").once().then((DataSnapshot snapshot){
+    requestNum = snapshot.value();
+  });
+  return requestNum;
+}
 
-
+void createRequest(){
+  int num = getRequestNumber();
+  String temp = "request" + num.toString();
+  databaseReference.child("requests").child(temp).set({
+    'assigned': false,
+    'category': categoryName,
+    'description': description,
+    'latitude': globals.Lat,
+    'longitude': globals.Long,
+    'requester': false,
+    'resolved': false,
+    'subcategory': subCategoryName
+  });
+  databaseReference.set({
+    'requestNumber': ++num
+  });
+}
 
   _switchStatement(){
               if(categoryName == "Health") {
@@ -38,15 +62,15 @@ class _RequestWidget extends State<RequestWidget> {
   Widget _buildDescription(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Description'),
-      validator: (value) {
+      validator: (value){
         if (value.isEmpty) {
-            return 'Please enter description.';
+            return 'Please enter a description.';
         }
       },
       onSaved: (val) => setState(() => description = val),
     );
   }
-  Widget _buildSubCategory(String categoryName){
+  Widget _buildSubCategory(){
     _switchStatement();
     if(subCatList!=null){
       return DropdownButton<String>(
@@ -106,10 +130,7 @@ class _RequestWidget extends State<RequestWidget> {
             );
           })
           .toList(),
-  );
-    
-            
-          
+  );        
   }
 
   @override
@@ -134,6 +155,7 @@ class _RequestWidget extends State<RequestWidget> {
                      ],
                   ),
 
+                  //SUBCATEGORY 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -141,15 +163,17 @@ class _RequestWidget extends State<RequestWidget> {
                         "Enter your subcategory",
                         textAlign: TextAlign.center,
                       ),
-                     _buildSubCategory(categoryName),
+                     _buildSubCategory(),
                      ],
 
                    ),
+
+                   //SUBMIT BUTTON
                    _buildDescription(),
                     RaisedButton(
                       child: Text('Submit'),
                       onPressed:(){
-
+                        createRequest();
                       },
                     ),
                 ],
@@ -163,57 +187,4 @@ class _RequestWidget extends State<RequestWidget> {
       ),
     );
   }
-  // Widget build(BuildContext context){
-  //   return Scaffold(
-  //       drawer: Drawer(
-  //         child: ListView(
-  //           padding: EdgeInsets.zero,
-  //           children: <Widget>[
-
-  //           //HEADER FOR MAIN CATEGORY
-  //           Text('Type of Issue?',
-  //             textAlign: TextAlign.left,
-  //             overflow: TextOverflow.ellipsis,
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-
-  //       //CREATING MAIN CATEGORY DROPDOWN
-        
-
-  //       //CREATING SUBCATEGORY DROPDOWN
-  //       /*DropdownButton<String>(
-  //         value: subCategory,
-  //         icon: Icon(
-  //           Icons.arrow_drop_down,
-  //           color: Colors.black,
-  //           size: 16,
-  //         ),
-  //         onChanged: (String newValue) {
-  //           setState(() {
-  //             subCategory = newValue;
-  //           });
-  //         },
-  //         items: subCatList
-  //         .map<DropdownMenuItem<String>>((String value) {
-  //             return DropdownMenuItem<String>(
-  //               value: value,
-  //               child: Text(value),
-  //             );
-  //           })
-  //           .toList(),
-  //       ), */
-
-  //       //TEXT BOX FOR USER TO INPUT REQUEST DESCRIPTION
-  //       TextField(
-  //         obscureText: false,
-  //         decoration: InputDecoration(
-  //           border: OutlineInputBorder(),
-  //           labelText: 'Enter here a description of your problem.',
-  //         ),
-  //       )
-  //           ],
-  //         )
-  //     )
-  //   );
-  // }
 }
