@@ -17,8 +17,8 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     GetCurrentLocation(),
-    Rewards(),
     RequestWidget(),
+    Rewards(),
     UserProfile()
   ];
 
@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         onTap: onTabTapped,
         currentIndex: _currentIndex,
         items: [
