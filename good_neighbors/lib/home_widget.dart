@@ -43,17 +43,13 @@ class _HomeState extends State<Home> {
             title: Text('Rewards'),
           ),
           BottomNavigationBarItem(
-<<<<<<< HEAD
+
 
             
            icon: Icon(Icons.person),
             title: Text('Profile')
           )
-=======
-             icon: Icon(Icons.person),
-             title: Text('Profile')
-           )
->>>>>>> 5744d84b0dca51a3087d3edc007a4668c4f550a9
+
         ],
       ),
     );
