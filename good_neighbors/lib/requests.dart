@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class RequestWidget extends StatefulWidget {
   RequestWidget({Key key}) : super(key: key);
 
@@ -8,7 +9,7 @@ class RequestWidget extends StatefulWidget {
 
 class _RequestWidget extends State<RequestWidget> {
   Color color;
-  String mainCategory = 'Type of Issue';
+  String dropdownValue;
   //String subCategory = 'Specific Type';
   //int index = 0;
   //List<String> subCatList  = <String>[];
@@ -16,32 +17,33 @@ class _RequestWidget extends State<RequestWidget> {
 
   _RequestWidget(this.color);
 
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-
-            //HEADER FOR MAIN CATEGORY
-            Text('Type of Issue?',
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-
-        //CREATING MAIN CATEGORY DROPDOWN
-        DropdownButton<String>(
-          value: mainCategory,
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Colors.black,
-            size: 16,
-          ),
-          onChanged: (String newValue) {
-            setState(() {
-              mainCategory = newValue;
+  Widget _buildCategory(){
+    return DropdownButton<String>(
+        value: dropdownValue,
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(
+          color: Colors.red
+        ),
+        underline: Container(
+          height: 2,
+          color: Colors.red,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownValue = newValue;
+          });
+        },
+        items: <String>['Health','Automotive','At-Home','Weather']
+          .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          })
+          .toList(),
+  );
               //SETTING SUBCATEGORY IDENTIFIERS
               /* if(mainCategory == "Health") {
                 subCatList = ["I need a ride to the emergency room", "I need medication delivered", "I'm injured", "Other"];
@@ -55,51 +57,94 @@ class _RequestWidget extends State<RequestWidget> {
                 //HIDE THE SUBCATEGORY
                 //TO DO
               } */
-            });
-          },
-          items: <String>['Health', 'Automotive', 'At-Home', 'Weather', 'Other']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-        ),
+            
+          
+  }
 
-        //CREATING SUBCATEGORY DROPDOWN
-        /*DropdownButton<String>(
-          value: subCategory,
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Colors.black,
-            size: 16,
+  @override
+  Widget build (BuildContext context){
+    Size screenSize = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Stack(
+        children:<Widget>[
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: screenSize.height / 6.4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Enter your category",
+                        textAlign: TextAlign.center,
+                      ),
+                     _buildCategory(),
+                     ]
+                  ),
+                  
+                 
+                ],
+              ),
+            ),
           ),
-          onChanged: (String newValue) {
-            setState(() {
-              subCategory = newValue;
-            });
-          },
-          items: subCatList
-          .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            })
-            .toList(),
-        ), */
+          
+        ],
 
-        //TEXT BOX FOR USER TO INPUT REQUEST DESCRIPTION
-        TextField(
-          obscureText: false,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Enter here a description of your problem.',
-          ),
-        )
-            ],
-          )
-      )
+      ),
     );
   }
+  // Widget build(BuildContext context){
+  //   return Scaffold(
+  //       drawer: Drawer(
+  //         child: ListView(
+  //           padding: EdgeInsets.zero,
+  //           children: <Widget>[
+
+  //           //HEADER FOR MAIN CATEGORY
+  //           Text('Type of Issue?',
+  //             textAlign: TextAlign.left,
+  //             overflow: TextOverflow.ellipsis,
+  //             style: TextStyle(fontWeight: FontWeight.bold),
+  //           ),
+
+  //       //CREATING MAIN CATEGORY DROPDOWN
+        
+
+  //       //CREATING SUBCATEGORY DROPDOWN
+  //       /*DropdownButton<String>(
+  //         value: subCategory,
+  //         icon: Icon(
+  //           Icons.arrow_drop_down,
+  //           color: Colors.black,
+  //           size: 16,
+  //         ),
+  //         onChanged: (String newValue) {
+  //           setState(() {
+  //             subCategory = newValue;
+  //           });
+  //         },
+  //         items: subCatList
+  //         .map<DropdownMenuItem<String>>((String value) {
+  //             return DropdownMenuItem<String>(
+  //               value: value,
+  //               child: Text(value),
+  //             );
+  //           })
+  //           .toList(),
+  //       ), */
+
+  //       //TEXT BOX FOR USER TO INPUT REQUEST DESCRIPTION
+  //       TextField(
+  //         obscureText: false,
+  //         decoration: InputDecoration(
+  //           border: OutlineInputBorder(),
+  //           labelText: 'Enter here a description of your problem.',
+  //         ),
+  //       )
+  //           ],
+  //         )
+  //     )
+  //   );
+  // }
 }
