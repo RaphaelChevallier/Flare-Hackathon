@@ -29,6 +29,7 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
     ref.child("requests").once().then((DataSnapshot snap){
     for(var key in snap.value.keys){
       if(snap.value[key]['resolved'] == false){
+        print(snap.value[key]);
         Marker resultMarker = Marker(
         markerId: MarkerId(key),
         infoWindow: InfoWindow(
