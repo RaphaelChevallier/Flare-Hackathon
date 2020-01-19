@@ -13,7 +13,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="good_neighbors"
+        android:label="flare"
         android:icon="@mipmap/ic_launcher">
 
          <meta-data android:name="com.google.android.geo.API_KEY"

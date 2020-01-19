@@ -26,6 +26,7 @@ class _UserProfile extends State<UserProfile> {
   void initState() {
     DatabaseReference ref = FirebaseDatabase.instance.reference();
     ref.child("profile").child("1").once().then((DataSnapshot snap){
+      print('Data : ${snap.value}');
       name = snap.value['name'].toString();
       rating = int.parse(snap.value['rating'].toString());
       helpedPeople = int.parse(snap.value['peopleHelped'].toString());
