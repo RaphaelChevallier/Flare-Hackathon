@@ -4,6 +4,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'globals.dart' as globals;
 import  'dart:async';
+import 'dart:io';
+import 'home_widget.dart';
+
 
 class Reference{
   bool assigned, requester, resolved;
@@ -61,32 +64,44 @@ class _RequestWidget extends State<RequestWidget> {
   final databaseReference = FirebaseDatabase.instance.reference();
   int requestNum;
 
+  @override
+  void initState() {
+    int num = getRequestNumber();
+      setState(() {
+      this.requestNum = num;
+    }); 
+    super.initState();
+    }
+
   _RequestWidget(this.color);
 
 //FUNCTION TO READ FROM DATABASE
 int getRequestNumber(){
   databaseReference.once().then((DataSnapshot snapshot){
     requestNum = snapshot.value['requestNumber'];
-    print(snapshot.value);
+    print(snapshot.value['requestNumber']);
   });
   return requestNum;
 }
 
-//FUNCTION TO WRITE TO DATABASE  //BROKEN, CANNOT FIX
-void createRequest(){
-  int num = getRequestNumber();
-  print(num);
-  String temp = "request" + num.toString();
-  Reference newRef = new Reference();
-  newRef.setCategory(categoryName);
-  newRef.setDescription(description);
-  newRef.setLatitude(globals.Lat);
-  newRef.setLongitude(globals.Long);
-  newRef.setSubcategory(subCategoryName);
-  DatabaseReference newReference = databaseReference.child("requests").push();
-  newReference.set(newRef);
-  databaseReference.update({
-    'requestNumber': ++num
+void updateRequestNum(num){
+  DatabaseReference ref = FirebaseDatabase.instance.reference();
+  ref.update({
+    'requestNumber': num,
+  });
+}
+
+void createRequest(category, description, latitude, longitude){
+  print(latitude);
+  updateRequestNum(requestNum+1);
+  databaseReference.child("requests").child("request" + "${requestNum+1}").set({
+    'category': category,
+    'description': description,
+    'assigned': false,
+    'latitude': latitude,
+    'longitude': longitude,
+    'requester': 'Beckham',
+    'resolved': false
   });
 }
 
@@ -164,7 +179,7 @@ void createRequest(){
         ),
         onChanged: (String newValue) {
           setState(() {
-            categoryName = newValue;
+            categoryName = newValue.toString();
             subCategoryName=null;
           });
 
@@ -221,12 +236,16 @@ void createRequest(){
                    _buildDescription(),
                     RaisedButton(
                       child: Text('Submit'),
-                      onPressed:() async{
-                        await createRequest();
+                      onPressed:() {
+                        createRequest(categoryName, description.toString(), globals.Lat, globals.Long);
                         final snackBar = SnackBar(
                           content: Text('Request submitted')
                         );
                         Scaffold.of(context).showSnackBar(snackBar);
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
                       },
                     ),
                 ],
