@@ -9,7 +9,7 @@ import 'globals.dart' as globals;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-
+import 'accept_flare.dart';
 class GetCurrentLocation extends StatefulWidget {
   @override
   _GetCurrentLocationState createState() => _GetCurrentLocationState();
@@ -18,12 +18,39 @@ class GetCurrentLocation extends StatefulWidget {
 class _GetCurrentLocationState extends State<GetCurrentLocation> {
 
   Completer<GoogleMapController> _controller = Completer();
+  List keys = [];
   static LatLng latLng;
-  Iterable markers = [];
+  // Iterable markers = [];
+  Set<Marker> markers = Set();
 
   @override
   void initState(){
-    super.initState();
+    DatabaseReference ref = FirebaseDatabase.instance.reference();
+    ref.child("requests").once().then((DataSnapshot snap){
+    for(var key in snap.value.keys){
+      if(snap.value[key]['resolved'] == false){
+        Marker resultMarker = Marker(
+        markerId: MarkerId(key),
+        infoWindow: InfoWindow(
+        onTap: () { Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AcceptFlare(snap.value[key]),
+        ),
+        );
+        },
+        title: "${snap.value[key]['category']}",
+        snippet: "${snap.value[key]['description']}"),
+        position: LatLng(snap.value[key]['latitude'],
+        snap.value[key]['longitude']),
+        );
+        // Add it to Set
+        markers.add(resultMarker);
+      }
+    }
+    setState(() {
+      this.markers = markers;
+    }); 
+    });
     getLocation();
   }
 
@@ -56,49 +83,14 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
           if (_position != null) {
             setState((){
             latLng = LatLng(_position.latitude, _position.longitude,);
+            // globals.Lat = _position.latitude;
+            // globals.Long = _position.longitude;
             });
-            getData(latLng);
           }
         });
         break;
     }
   }
-
-  getData(LatLng latLng) async {
-    try {
-      String latitude = latLng.latitude.toString();
-      String longitude = latLng.longitude.toString();
-      String APINearPlaces = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + latitude  + ',' + longitude + '&radius=1500&type=restaurant,cafe,bus_station,atm,bank,lodging,local_government_office,store,subway_station,taxi_stand,food,&key=AIzaSyCSL00gc3nX5bkkUf1ckkkpL8pISNJOvWA';
-      final response =
-          await http.get(APINearPlaces);
-
-      final int statusCode = response.statusCode;
-
-      if (statusCode == 201 || statusCode == 200) {
-        Map responseBody = json.decode(response.body);
-        List results = responseBody["results"];
-
-        Iterable _markers = Iterable.generate(20, (index) {
-          Map result = results[index];
-          globals.locations = result;
-          Map location = result["geometry"]["location"];
-          LatLng latLngMarker = LatLng(location["lat"], location["lng"]);
-
-          return Marker(markerId: MarkerId("marker$index"),position: latLngMarker);
-        });
-
-        setState(() {
-          markers = _markers;
-        });
-        print(globals.locations);
-      } else {
-        throw Exception('Error');
-      }
-    } catch(e) {
-      print(e.toString());
-    }
-  }
-
 
   void _onMapCreated(GoogleMapController controller) {
     controller.setMapStyle('[ { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "color": "#ffffff" } ] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "color": "#000000" }, { "lightness": 13 } ] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [ { "color": "#144b53" }, { "lightness": 14 }, { "weight": 1.4 } ] }, { "featureType": "landscape", "elementType": "all", "stylers": [ { "color": "#08304b" } ] }, { "featureType": "poi", "elementType": "geometry", "stylers": [ { "color": "#0c4152" }, { "lightness": 5 } ] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [ { "color": "#0b434f" }, { "lightness": 25 } ] }, { "featureType": "road.arterial", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "road.arterial", "elementType": "geometry.stroke", "stylers": [ { "color": "#0b3d51" }, { "lightness": 16 } ] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [ { "color": "#000000" } ] }, { "featureType": "transit", "elementType": "all", "stylers": [ { "color": "#146474" } ] }, { "featureType": "water", "elementType": "all", "stylers": [ { "color": "#021019" } ] } ]');
@@ -106,18 +98,20 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
+      return GoogleMap(
+      markers: markers,
       // markers: Set.from(
       //     markers,
       //   ),
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(
         target: latLng,
-        zoom: 18.0,
-        tilt: 50.0,
+        zoom: 13.0,
+        tilt: 15.0,
       ),
       indoorViewEnabled: true,
       myLocationEnabled: true,
     );
   }
+
 }
