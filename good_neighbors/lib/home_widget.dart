@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'placeholder_widget.dart';
 import 'google_maps_view.dart';
 import 'requests.dart';
 import 'profile.dart';
@@ -43,6 +42,7 @@ class _HomeState extends State<Home> {
             title: Text('Rewards'),
           ),
           BottomNavigationBarItem(
+<<<<<<< HEAD
 
 
             
@@ -50,6 +50,11 @@ class _HomeState extends State<Home> {
             title: Text('Profile')
           )
 
+=======
+             icon: Icon(Icons.person),
+             title: Text('Profile')
+           )
+>>>>>>> 3207b888f1d8c0b3f47493b4c8530a9d0d16ac34
         ],
       ),
     );
