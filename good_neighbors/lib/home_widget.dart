@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'placeholder_widget.dart';
 import 'google_maps_view.dart';
+<<<<<<< HEAD
 import 'requests.dart';
+=======
+import 'profile.dart';
+>>>>>>> 1a8c1a2f631e5d1790e5ac2f4d800a634ca8d075
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +20,7 @@ class _HomeState extends State<Home> {
     GetCurrentLocation(),
     RequestWidget(),
     PlaceholderWidget(Colors.green),
-    //PlaceholderWidget(Colors.blue)
+    UserProfile()
   ];
 
   @override
@@ -40,9 +44,15 @@ class _HomeState extends State<Home> {
             title: Text('Rewards'),
           ),
           BottomNavigationBarItem(
+<<<<<<< HEAD
              icon: Icon(Icons.person),
              title: Text('Profile')
            )
+=======
+           icon: Icon(Icons.person),
+            title: Text('Profile')
+          )
+>>>>>>> 1a8c1a2f631e5d1790e5ac2f4d800a634ca8d075
         ],
       ),
     );

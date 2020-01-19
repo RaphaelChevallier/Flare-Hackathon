@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -7,6 +6,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'globals.dart' as globals;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 
 class GetCurrentLocation extends StatefulWidget {
   @override
@@ -14,6 +16,12 @@ class GetCurrentLocation extends StatefulWidget {
 }
 
 class _GetCurrentLocationState extends State<GetCurrentLocation> {
+  // final FireBaseApp app = FirebaseApp(options: FirebaseOptions(
+  //   googleAppID: "1:179852798619:android:471b308373555a8a10343e",
+  //   apiKey: "AIzaSyDWVlWGQDXtfWjXSphFXiDLA4-zr7zyGu0",
+  //   databaseURL: "https://goodneighbors-265522.firebaseio.com",
+  // ));
+
   Completer<GoogleMapController> _controller = Completer();
   static LatLng latLng;
   Iterable markers = [];
