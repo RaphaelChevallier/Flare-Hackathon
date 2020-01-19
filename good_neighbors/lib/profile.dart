@@ -1,15 +1,49 @@
 import 'package:flutter/material.dart';
 import 'star_display.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'dart:io';
 
-class UserProfile extends StatelessWidget {
-  final String _firstName="Aaron";
-  final String _lastName="Burr";
-  final String _bio="Wait for it";
-  final int _score=3;
-  final int _helped=5;
+class UserProfile extends StatefulWidget{
+@override
+  State<StatefulWidget> createState() {
+    return _UserProfile();
+  }
+}
+
+class _UserProfile extends State<UserProfile> {
+  
+  // final String _firstName="Aaron";
+  // final String _lastName="Burr";
+  String name= " ";
+  int rating = 0;
+  int helpedPeople = 0;
+  String _bio="Wait for it";
+  // final int _score=3;
+  // final int _helped=5;
+  
+   @override
+  void initState() {
+    DatabaseReference ref = FirebaseDatabase.instance.reference();
+    ref.child("profile").child("person1").once().then((DataSnapshot snap){
+      print('Data : ${snap.value}');
+      name = snap.value['name'].toString();
+      rating = int.parse(snap.value['rating'].toString());
+      helpedPeople = int.parse(snap.value['peopleHelped'].toString());
+      print("ProfilePerson: ${rating}");
+      setState(() {
+      this.rating = rating;
+      this.name = name;
+      this.helpedPeople = helpedPeople;
+    }); 
+    });
+    super.initState();
+  }
+  
 
   Widget _buildStarDisplay(){
-    return StarDisplay(value: _score);
+    return StarDisplay(value: rating);
   }
 
   Widget _buildCoverImage(Size screenSize){
@@ -54,7 +88,7 @@ class UserProfile extends StatelessWidget {
     );
 
     return Text(
-      _firstName,
+      name,
       style: _nameTextStyle,
     );
   }
@@ -98,8 +132,8 @@ class UserProfile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _buildStatItem("Helped", _helped),
-          _buildStatItem("Score", _score),
+          _buildStatItem("Helped", helpedPeople),
+          _buildStatItem("Score", rating),
         ],
       ),
     );
@@ -165,3 +199,11 @@ class UserProfile extends StatelessWidget {
   }
 }
 
+
+class Person {
+  String name;
+  double rating;
+  int peopleHelped;
+
+  Person(this.name, this.rating, this.peopleHelped);
+}

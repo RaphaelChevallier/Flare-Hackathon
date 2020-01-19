@@ -16,11 +16,6 @@ class GetCurrentLocation extends StatefulWidget {
 }
 
 class _GetCurrentLocationState extends State<GetCurrentLocation> {
-  // final FireBaseApp app = FirebaseApp(options: FirebaseOptions(
-  //   googleAppID: "1:179852798619:android:471b308373555a8a10343e",
-  //   apiKey: "AIzaSyDWVlWGQDXtfWjXSphFXiDLA4-zr7zyGu0",
-  //   databaseURL: "https://goodneighbors-265522.firebaseio.com",
-  // ));
 
   Completer<GoogleMapController> _controller = Completer();
   static LatLng latLng;
