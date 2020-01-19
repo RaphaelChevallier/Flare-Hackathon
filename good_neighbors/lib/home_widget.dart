@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
     GetCurrentLocation(),
     PlaceholderWidget(Colors.deepOrange),
     PlaceholderWidget(Colors.green),
-    //PlaceholderWidget(Colors.blue)
+    //profil(Colors.blue)
   ];
 
   @override
