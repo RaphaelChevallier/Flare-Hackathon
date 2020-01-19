@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'google_maps_view.dart';
+import 'home_widget.dart';
 
 class Success extends StatelessWidget {
   var object;
@@ -21,7 +21,7 @@ class Success extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GetCurrentLocation()),
+                  MaterialPageRoute(builder: (context) => Home()),
                 );
               }
             ),
