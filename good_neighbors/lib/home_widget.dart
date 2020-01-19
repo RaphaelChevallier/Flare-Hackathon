@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'placeholder_widget.dart';
 import 'google_maps_view.dart';
-import 'profile.dart';
 import 'requests.dart';
+import 'profile.dart';
+import 'rewards.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     GetCurrentLocation(),
     RequestWidget(),
-    PlaceholderWidget(Colors.green),
+    Rewards(),
     UserProfile()
   ];
 
@@ -25,6 +26,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         onTap: onTabTapped,
         currentIndex: _currentIndex,
         items: [
@@ -41,11 +43,17 @@ class _HomeState extends State<Home> {
             title: Text('Rewards'),
           ),
           BottomNavigationBarItem(
+<<<<<<< HEAD
 
             
            icon: Icon(Icons.person),
             title: Text('Profile')
           )
+=======
+             icon: Icon(Icons.person),
+             title: Text('Profile')
+           )
+>>>>>>> 5744d84b0dca51a3087d3edc007a4668c4f550a9
         ],
       ),
     );

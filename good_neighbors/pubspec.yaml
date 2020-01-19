@@ -62,6 +62,8 @@ flutter:
     assets:
     - assets/images/cover.jpeg
     - assets/images/photo.png
+    - assets/images/smileyPicture.jpg
+    - assets/images/highFive.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
