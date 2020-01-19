@@ -1,4 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'globals.dart' as globals;
+import  'dart:async';
+
+class Reference{
+  bool assigned, requester, resolved;
+  String category, subcategory, description;
+  double latitude, longitude;
+  Reference(){
+    bool assigned = false;
+    bool requester = false;
+    bool resolved = false;
+    String category = '';
+    String subcategory = '';
+    String description = '';
+    double latitude = 0;
+    double longitude = 0;
+  }
+  void setAssigned(bool assigned){
+    this.assigned = assigned;
+  }
+  void setRequester(bool requester){
+    this.requester = requester;
+  }
+  void setResolved(bool resolved){
+    this.resolved = resolved;
+  }
+  void setCategory(String category){
+    this.category = category;
+  }
+  void setSubcategory(String subcategory){
+    this.subcategory = subcategory;
+  }
+  void setDescription(String description){
+    this.description = description;
+  }
+  void setLatitude(double latitude){
+    this.latitude = latitude;
+  }
+  void setLongitude(double longitude){
+    this.longitude = longitude;
+  }
+}
 
 class RequestWidget extends StatefulWidget {
   RequestWidget({Key key}) : super(key: key);
@@ -13,16 +58,39 @@ class _RequestWidget extends State<RequestWidget> {
   String subCategoryName;
   String description;
   List<String> subCatList  = <String>[];
-   
-
-     
-  //bool other = false;
+  final databaseReference = FirebaseDatabase.instance.reference();
+  int requestNum;
 
   _RequestWidget(this.color);
 
+//FUNCTION TO READ FROM DATABASE
+int getRequestNumber(){
+  databaseReference.once().then((DataSnapshot snapshot){
+    requestNum = snapshot.value['requestNumber'];
+    print(snapshot.value);
+  });
+  return requestNum;
+}
 
+//FUNCTION TO WRITE TO DATABASE  //BROKEN, CANNOT FIX
+void createRequest(){
+  int num = getRequestNumber();
+  print(num);
+  String temp = "request" + num.toString();
+  Reference newRef = new Reference();
+  newRef.setCategory(categoryName);
+  newRef.setDescription(description);
+  newRef.setLatitude(globals.Lat);
+  newRef.setLongitude(globals.Long);
+  newRef.setSubcategory(subCategoryName);
+  DatabaseReference newReference = databaseReference.child("requests").push();
+  newReference.set(newRef);
+  databaseReference.update({
+    'requestNumber': ++num
+  });
+}
 
-
+//SWITCH STATEMENT FOR SUBCATEGORY
   _switchStatement(){
               if(categoryName == "Health") {
                 subCatList=["Ride to the emergency room", "Medication delivered", "Injured", "Other"];
@@ -33,20 +101,23 @@ class _RequestWidget extends State<RequestWidget> {
               } else if (categoryName == "Weather"){
                 subCatList = ["Need heating supplies for extreme weather", "Other"];
               } 
-
   }
+
   Widget _buildDescription(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Description'),
-      validator: (value) {
+      validator: (value){
         if (value.isEmpty) {
-            return 'Please enter description.';
+            return 'Please enter a description.';
         }
       },
-      onSaved: (val) => setState(() => description = val),
+      onSaved: (String val){
+        setState(() {description = val;});
+      }
     );
   }
-  Widget _buildSubCategory(String categoryName){
+
+  Widget _buildSubCategory(){
     _switchStatement();
     if(subCatList!=null){
       return DropdownButton<String>(
@@ -106,10 +177,7 @@ class _RequestWidget extends State<RequestWidget> {
             );
           })
           .toList(),
-  );
-    
-            
-          
+  );        
   }
 
   @override
@@ -123,6 +191,8 @@ class _RequestWidget extends State<RequestWidget> {
               child: Column(
                 children: <Widget>[
                   SizedBox(height: screenSize.height / 6.4),
+
+                  //MAIN CATEGORY SELECTION
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -134,6 +204,7 @@ class _RequestWidget extends State<RequestWidget> {
                      ],
                   ),
 
+                  //SUBCATEGORY SELECTION
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -141,15 +212,21 @@ class _RequestWidget extends State<RequestWidget> {
                         "Enter your subcategory",
                         textAlign: TextAlign.center,
                       ),
-                     _buildSubCategory(categoryName),
+                     _buildSubCategory(),
                      ],
 
                    ),
+
+                   //SUBMIT BUTTON
                    _buildDescription(),
                     RaisedButton(
                       child: Text('Submit'),
-                      onPressed:(){
-
+                      onPressed:() async{
+                        await createRequest();
+                        final snackBar = SnackBar(
+                          content: Text('Request submitted')
+                        );
+                        Scaffold.of(context).showSnackBar(snackBar);
                       },
                     ),
                 ],
@@ -157,63 +234,8 @@ class _RequestWidget extends State<RequestWidget> {
               ),
             ),
           ),
-          
         ],
-
       ),
     );
   }
-  // Widget build(BuildContext context){
-  //   return Scaffold(
-  //       drawer: Drawer(
-  //         child: ListView(
-  //           padding: EdgeInsets.zero,
-  //           children: <Widget>[
-
-  //           //HEADER FOR MAIN CATEGORY
-  //           Text('Type of Issue?',
-  //             textAlign: TextAlign.left,
-  //             overflow: TextOverflow.ellipsis,
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-
-  //       //CREATING MAIN CATEGORY DROPDOWN
-        
-
-  //       //CREATING SUBCATEGORY DROPDOWN
-  //       /*DropdownButton<String>(
-  //         value: subCategory,
-  //         icon: Icon(
-  //           Icons.arrow_drop_down,
-  //           color: Colors.black,
-  //           size: 16,
-  //         ),
-  //         onChanged: (String newValue) {
-  //           setState(() {
-  //             subCategory = newValue;
-  //           });
-  //         },
-  //         items: subCatList
-  //         .map<DropdownMenuItem<String>>((String value) {
-  //             return DropdownMenuItem<String>(
-  //               value: value,
-  //               child: Text(value),
-  //             );
-  //           })
-  //           .toList(),
-  //       ), */
-
-  //       //TEXT BOX FOR USER TO INPUT REQUEST DESCRIPTION
-  //       TextField(
-  //         obscureText: false,
-  //         decoration: InputDecoration(
-  //           border: OutlineInputBorder(),
-  //           labelText: 'Enter here a description of your problem.',
-  //         ),
-  //       )
-  //           ],
-  //         )
-  //     )
-  //   );
-  // }
 }
