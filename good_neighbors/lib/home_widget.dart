@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'placeholder_widget.dart';
 import 'google_maps_view.dart';
-import 'profile.dart'
-import 'requests.dart'
+import 'profile.dart';
+import 'requests.dart';
 
 class Home extends StatefulWidget {
   @override
