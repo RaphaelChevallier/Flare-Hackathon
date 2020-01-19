@@ -207,7 +207,16 @@ void createRequest(category, description, latitude, longitude){
     );
   }
 
- 
+ Widget _buildStatContainer(Row inner) {
+    return Container(
+      height: 60.0,
+      margin: EdgeInsets.only(top: 8.0),
+      decoration: BoxDecoration(
+        color: Color(0xFFEFF4F7),
+      ),
+      child: inner
+    );
+  }
   
   @override
   Widget build (BuildContext context){
@@ -239,7 +248,8 @@ void createRequest(category, description, latitude, longitude){
                   SizedBox(height: screenSize.height / 7.4),
 
                   //MAIN CATEGORY SELECTION
-                  Row(
+                  _buildStatContainer(
+                    Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
@@ -249,10 +259,12 @@ void createRequest(category, description, latitude, longitude){
                      _buildCategory(),
                      ],
                   ),
-                  SizedBox(height: screenSize.height / 5.4),
+                  ),
+                  
 
                   //SUBCATEGORY SELECTION
-                  Row(
+                  _buildStatContainer(
+                    Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
@@ -263,9 +275,11 @@ void createRequest(category, description, latitude, longitude){
                      ],
 
                    ),
+                  ),
                    SizedBox(height: screenSize.height / 6.4),
 
                    //SUBMIT BUTTON
+                   
                    _buildDescription(),
                     RaisedButton(
                       child: Text('Submit'),
