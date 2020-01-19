@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.5.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,6 +32,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+analyzer:
+  enable-experiment:
+    - control-flow-collections
 
 
 # For information on the generic Dart part of this file, see the
