@@ -64,14 +64,7 @@ class Rewards extends StatelessWidget {
     );
    }
 
-   Widget _buildSeparator(Size screenSize) {
-    return Container(
-      width: screenSize.width / 1.6,
-      height: 2.0,
-      color: Colors.black54,
-      margin: EdgeInsets.only(top: 4.0),
-    );
-  }
+  
 
   Widget _buildStatContainer(String rewardName,String rewardImgURL,int rewardPoints) {
     return Container(

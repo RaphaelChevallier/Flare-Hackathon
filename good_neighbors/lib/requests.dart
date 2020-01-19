@@ -195,17 +195,48 @@ void createRequest(category, description, latitude, longitude){
   );        
   }
 
+  Widget _buildCoverImage(Size screenSize){
+    return Container(
+      height: screenSize.height/3.6,
+      decoration:BoxDecoration(
+        image:DecorationImage(
+          image: AssetImage ('assets/images/cover.jpeg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+ 
+  
   @override
   Widget build (BuildContext context){
     Size screenSize = MediaQuery.of(context).size;
+    TextStyle _rewardTextStyle = TextStyle(
+      fontFamily: 'Roboto',
+      color: Colors.red,
+      fontSize: 22.0,
+      fontWeight: FontWeight.w800,
+    );
+    TextStyle _labelTextStyle = TextStyle(
+      fontFamily: 'Roboto',
+      color: Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+    );
     return Scaffold(
       body: Stack(
         children:<Widget>[
+          _buildCoverImage(screenSize ),
           SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: screenSize.height / 6.4),
+                  SizedBox(height: screenSize.height / 8.4),
+
+                  Text("Create an alert for users nearby:",
+                   style: _rewardTextStyle,),
+                  SizedBox(height: screenSize.height / 7.4),
 
                   //MAIN CATEGORY SELECTION
                   Row(
@@ -213,11 +244,12 @@ void createRequest(category, description, latitude, longitude){
                     children: <Widget>[
                       Text(
                         "Enter your category",
-                        textAlign: TextAlign.center,
+                        style: _labelTextStyle,
                       ),
                      _buildCategory(),
                      ],
                   ),
+                  SizedBox(height: screenSize.height / 5.4),
 
                   //SUBCATEGORY SELECTION
                   Row(
@@ -225,12 +257,13 @@ void createRequest(category, description, latitude, longitude){
                     children: <Widget>[
                       Text(
                         "Enter your subcategory",
-                        textAlign: TextAlign.center,
+                        style: _labelTextStyle
                       ),
                      _buildSubCategory(),
                      ],
 
                    ),
+                   SizedBox(height: screenSize.height / 6.4),
 
                    //SUBMIT BUTTON
                    _buildDescription(),
