@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'google_maps_view.dart';
+import 'success.dart';
 
 class AcceptFlare extends StatelessWidget {
   final object;
+  String keys;
 
-  AcceptFlare(this.object);
+  AcceptFlare(this.object, this.keys);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,11 @@ class AcceptFlare extends StatelessWidget {
               ),
               SizedBox(width: 35),
                RaisedButton(child: Text("Volunteer your help"),
-                onPressed: null,
+                onPressed: () { Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Success(object, keys),
+                  ),
+                  );},
                 color: Colors.blue,
                 textColor: Colors.black,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),

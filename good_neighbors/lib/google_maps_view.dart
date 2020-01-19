@@ -34,7 +34,7 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
         infoWindow: InfoWindow(
         onTap: () { Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AcceptFlare(snap.value[key]),
+          MaterialPageRoute(builder: (context) => AcceptFlare(snap.value[key], key.toString()),
         ),
         );
         },
