@@ -121,8 +121,8 @@ void createRequest(category, description, latitude, longitude){
   Widget _buildDescription(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Description'),
-      validator: (value){
-        if (value.isEmpty) {
+      validator: (val){
+        if (val.isEmpty) {
             return 'Please enter a description.';
         }
       },
@@ -270,7 +270,7 @@ void createRequest(category, description, latitude, longitude){
                     RaisedButton(
                       child: Text('Submit'),
                       onPressed:() {
-                        createRequest(categoryName, description.toString(), globals.Lat, globals.Long);
+                        createRequest(categoryName, subCategoryName.toString(), globals.Lat, globals.Long);
                         final snackBar = SnackBar(
                           content: Text('Request submitted')
                         );

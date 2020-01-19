@@ -185,6 +185,7 @@ class _UserProfile extends State<UserProfile> {
                   _buildBio(context),
                   _buildSeparator(screenSize),
                   _buildStarDisplay(),
+                  SwitchWidget()
                 ],
               ),
             ),
@@ -205,3 +206,54 @@ class Person {
 
   Person(this.name, this.rating, this.peopleHelped);
 }
+class SwitchWidget extends StatefulWidget {
+    @override
+    SwitchWidgetClass createState() => new SwitchWidgetClass();
+  }
+  
+class SwitchWidgetClass extends State {
+ 
+  bool switchControl = true;
+  var textHolder = 'Send me notifications';
+ 
+  void toggleSwitch(bool value) {
+ 
+      if(switchControl == false)
+      {
+        setState(() {
+          switchControl = true;
+          textHolder = 'Send me notifications';
+        });
+        // Put your code here which you want to execute on Switch ON event.
+ 
+      }
+      else
+      {
+        setState(() {
+          switchControl = false;
+           textHolder = 'Notifications off';
+        });
+        // Put your code here which you want to execute on Switch OFF event.
+      }
+  }
+      Widget build(BuildContext context) {
+      return Column( 
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:[ Transform.scale( 
+              scale: 1.5,
+              child: Switch(
+              onChanged: toggleSwitch,
+              value: switchControl,
+              activeColor: Colors.red,
+              activeTrackColor: Colors.redAccent[700],
+              inactiveThumbColor: Colors.white,
+              inactiveTrackColor: Colors.grey,
+            )
+          ), 
+ 
+        Text('$textHolder', style: TextStyle(fontSize: 24),)
+ 
+      ]);
+   }
+  }
+  
