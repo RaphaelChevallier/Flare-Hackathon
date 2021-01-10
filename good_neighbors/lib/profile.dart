@@ -193,6 +193,7 @@ class _UserProfile extends State<UserProfile> {
                   RoundedButton(
                   text: "SIGN OUT",
                   press: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
                     context.read<AuthenticationService>().signOut();
                   },
                 ),

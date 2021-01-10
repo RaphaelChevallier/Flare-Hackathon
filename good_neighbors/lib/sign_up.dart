@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'components/rounded_buttons.dart';
+import 'authentication_service.dart';
+import 'package:provider/provider.dart';
+import 'main.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -9,7 +12,8 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,16 +59,23 @@ class _SignupState extends State<Signup> {
               child: Column(
                 children: <Widget>[
                   RoundedInputField(
+                    controller: emailController,
                     hintText: "Your Email",
                     onChanged: (value) {},
                   ),
                   RoundedPasswordField(
+                    controller: passwordController,
                     onChanged: (value) {},
                   ),
                   SizedBox(height: 20.0),
                   RoundedButton(
                     text: "SIGN UP",
-                    press: () {},
+                    press: () {
+                      context.read<AuthenticationService>().signUp(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                      );
+                    },
                   ),
                   RoundedGoogleButton(
                     text: "Sign Up With Google",
@@ -86,7 +97,14 @@ class _SignupState extends State<Signup> {
                 SizedBox(width: 5.0),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed('/signin');
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AuthenticationWrapperMain();
+                      },
+                    ),
+                  );
                   },
                   child: Text('Sign In',
                   style: TextStyle(

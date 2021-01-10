@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'authentication_service.dart';
 import 'components/rounded_buttons.dart';
+import 'main.dart';
 
 class Signin extends StatefulWidget {
   @override
@@ -158,7 +159,14 @@ class _SigninState extends State<Signin> {
               SizedBox(width: 5.0),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/signup');
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AuthenticationWrapperSignUp();
+                    },
+                  ),
+                );
                 },
                 child: Text('Register Now',
                 style: TextStyle(

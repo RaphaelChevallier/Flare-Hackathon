@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         '/home': (BuildContext context) => new Home(),
         '/welcome': (BuildContext context) => new Welcome(),
       },
-      home: AuthenticationWrapper(),
+      home: new Welcome(),
       ),
     );
   }
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
 //   }
 // }
 
-class AuthenticationWrapper extends StatelessWidget {
+class AuthenticationWrapperMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
@@ -70,6 +70,18 @@ class AuthenticationWrapper extends StatelessWidget {
     if (firebaseUser != null) {
       return Home();
     }
-    return Signin(); //cuz welcome isnt connected straight to profile
+    return Signin();
+  }
+}
+
+class AuthenticationWrapperSignUp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User>();
+
+    if (firebaseUser != null) {
+      return Home();
+    }
+    return Signup();
   }
 }

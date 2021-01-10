@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:good_neighbors/main.dart';
 import 'components/rounded_buttons.dart';
 import 'sign_in.dart';
 import 'sign_up.dart';
+import 'package:provider/provider.dart';
+import 'authentication_service.dart';
+
 
 
 class Welcome extends StatefulWidget {
@@ -42,7 +46,7 @@ class _WelcomeState extends State<Welcome>  {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return Signin();
+                      return AuthenticationWrapperMain();
                     },
                   ),
                 );
@@ -57,7 +61,7 @@ class _WelcomeState extends State<Welcome>  {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return Signup();
+                      return AuthenticationWrapperSignUp();
                     },
                   ),
                 );
