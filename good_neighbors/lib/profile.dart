@@ -3,6 +3,11 @@ import 'star_display.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'components/rounded_buttons.dart';
+import 'authentication_service.dart';
+import 'package:provider/provider.dart';
+
+
 
 class UserProfile extends StatefulWidget{
 @override
@@ -185,6 +190,12 @@ class _UserProfile extends State<UserProfile> {
                   _buildBio(context),
                   _buildSeparator(screenSize),
                   _buildStarDisplay(),
+                  RoundedButton(
+                  text: "SIGN OUT",
+                  press: () {
+                    context.read<AuthenticationService>().signOut();
+                  },
+                ),
                   SwitchWidget()
                 ],
               ),

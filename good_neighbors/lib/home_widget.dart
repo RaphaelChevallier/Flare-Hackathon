@@ -4,6 +4,7 @@ import 'requests.dart';
 import 'profile.dart';
 import 'rewards.dart';
 
+
 class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -14,11 +15,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    GetCurrentLocation(),
+    UserProfile(),
     RequestWidget(),
     Rewards(),
-    UserProfile()
+    GetCurrentLocation()
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,8 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('Map'),
+            icon: Icon(Icons.person),
+            title: Text('Profile'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.help),
@@ -42,8 +44,8 @@ class _HomeState extends State<Home> {
             title: Text('Rewards'),
           ),
           BottomNavigationBarItem(
-             icon: Icon(Icons.person),
-             title: Text('Profile')
+             icon: Icon(Icons.map),
+             title: Text('Map')
            )
         ],
       ),

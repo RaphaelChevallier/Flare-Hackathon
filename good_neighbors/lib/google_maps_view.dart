@@ -99,20 +99,20 @@ class _GetCurrentLocationState extends State<GetCurrentLocation> {
 
   @override
   Widget build(BuildContext context) {
-      return GoogleMap(
-      markers: markers,
-      // markers: Set.from(
-      //     markers,
-      //   ),
-      onMapCreated: _onMapCreated,
-      initialCameraPosition: CameraPosition(
-        target: latLng,
-        zoom: 13.0,
-        tilt: 15.0,
-      ),
-      indoorViewEnabled: true,
-      myLocationEnabled: true,
-    );
+        return GoogleMap(
+        markers: markers,
+        // markers: Set.from(
+        //     markers,
+        //   ),
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: latLng,
+          zoom: 13.0,
+          tilt: 15.0,
+        ),
+        indoorViewEnabled: true,
+        myLocationEnabled: true,
+      );
   }
 
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'authentication_service.dart';
+import 'components/rounded_buttons.dart';
 
 class Signin extends StatefulWidget {
   @override
@@ -8,6 +11,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,38 +55,18 @@ class _SigninState extends State<Signin> {
             padding: EdgeInsets.only(top:40.0, left: 20.0, right:20.0),
             child: Column(
               children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'EMAIL',
-                    labelStyle: TextStyle(
-                      fontFamily: 'MontSerrat',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'PASSWORD',
-                    labelStyle: TextStyle(
-                      fontFamily: 'MontSerrat',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)
-                    ),
-                  ),
-                  obscureText: true,
-                ),
-                SizedBox(height: 10.0),
+                RoundedInputField(
+              controller: emailController,
+              hintText: "Your Email",
+              onChanged: (value) {},
+            ),
+            RoundedPasswordField(
+              controller: passwordController,
+              onChanged: (value) {},
+            ),
                 Container(
                   alignment: Alignment(1.0, 0.0),
-                  padding: EdgeInsets.only(top: 15.0, left: 20.0),
+                  padding: EdgeInsets.only(left: 20.0),
                   child: InkWell(
                     child: Text('Forgot Password', style: TextStyle(
                       color: Colors.deepOrange,
@@ -91,65 +76,76 @@ class _SigninState extends State<Signin> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40.0),
-                Container(
-                  height: 42.0,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(20.0),
-                    shadowColor: Colors.deepOrangeAccent,
-                    color: Colors.deepOrange,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Center(
-                        child: Text(
-                          'LOGIN',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'
-
-                          ),
-                        ),
-                      ),
-                    )
-                  )
-                ),
                 SizedBox(height: 20.0),
-                Container(
-                  height: 42.0,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        style: BorderStyle.solid,
-                        width: 1.0
-                      ),
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Center(
-                          child: Image(image: AssetImage('assets/images/google_logo.png'), color: null, height: 30.0),
-                        ),
-                        SizedBox(width: 10.0),
-                        Center(
-                          child: Text('Log in with Google',
-                           style: TextStyle(
-                             fontWeight: FontWeight.bold,
-                             fontFamily: 'Montserrat'
-                           )),
-                        ),
-                      ],
-                    ),
-                  ),
+                RoundedButton(
+                  text: "LOGIN",
+                  press: () {
+                    context.read<AuthenticationService>().signIn(
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim(),
+                  );
+                  },
                 ),
+                // Container(
+                //   height: 42.0,
+                //   child: Material(
+                //     borderRadius: BorderRadius.circular(20.0),
+                //     shadowColor: Colors.deepOrangeAccent,
+                //     color: Colors.deepOrange,
+                //     child: GestureDetector(
+                //       onTap: () {},
+                //       child: Center(
+                //         child: Text(
+                //           'LOGIN',
+                //           style: TextStyle(
+                //             color: Colors.white,
+                //             fontWeight: FontWeight.bold,
+                //             fontFamily: 'Montserrat'
+                //           ),
+                //         ),
+                //       ),
+                //     )
+                //   )
+                // ),
+                RoundedGoogleButton(
+                  text: "Sign In With Google",
+                  press: () {},
+                ),
+                // Container(
+                //   height: 42.0,
+                //   color: Colors.transparent,
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       border: Border.all(
+                //         color: Colors.black,
+                //         style: BorderStyle.solid,
+                //         width: 1.0
+                //       ),
+                //       color: Colors.transparent,
+                //       borderRadius: BorderRadius.circular(20.0)
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: <Widget>[
+                //         Center(
+                //           child: Image(image: AssetImage('assets/images/google_logo.png'), color: null, height: 30.0),
+                //         ),
+                //         SizedBox(width: 10.0),
+                //         Center(
+                //           child: Text('Log in with Google',
+                //            style: TextStyle(
+                //              fontWeight: FontWeight.bold,
+                //              fontFamily: 'Montserrat'
+                //            )),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ]
             ),
           ),
-          SizedBox(height: 15.0),
+          SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -161,8 +157,10 @@ class _SigninState extends State<Signin> {
               ),
               SizedBox(width: 5.0),
               InkWell(
-                onTap: () {},
-                child: Text('Register',
+                onTap: () {
+                  Navigator.of(context).pushNamed('/signup');
+                },
+                child: Text('Register Now',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   color: Colors.deepOrange,
