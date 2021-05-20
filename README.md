@@ -1,2 +1,2 @@
-# Good-Neighbors
+# Flare
 People Help Each Other
